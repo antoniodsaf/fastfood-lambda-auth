@@ -8,7 +8,7 @@ data "aws_cognito_user_pool_clients" "fastfood-user-pool-app-client" {
 
 resource "aws_lambda_function" "fastfood_lambda_authorizer" {
   function_name = "fastfood_lambda_authorizer"
-  handler       = "app/lambda.handler"
+  handler       = "lambda/function.handler"
   runtime       = "python3.11"
   role          = var.academy_role
 
