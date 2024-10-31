@@ -3,8 +3,8 @@ import os
 import boto3
 import logging
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
+logger.setLevel("INFO")
 
 cognito = boto3.client('cognito-idp')
 cognito_client_id = os.getenv('COGNITO_CLIENT_ID')
@@ -23,7 +23,7 @@ def sign_up(username):
         else:
             return None
     except cognito.exceptions.UsernameExistsException as e:
-        logger.warning("User ja existente", e)
+        logger.warn("User ja existente no cognito: '%s'", username)
         return init_auth(username)
     except Exception as e:
         logger.error("Erro ao criar user: %s", e)
@@ -49,7 +49,7 @@ def init_auth(username):
 def handler(event, context):
     try:
         body = json.loads(event['body'])
-        username = body.get('cpf', cognito_admin_username)
+        username = body.get('cpf')
         
         if not username:
             username = cognito_admin_username
